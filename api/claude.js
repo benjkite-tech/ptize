@@ -54,10 +54,44 @@ export default async function handler(req, res) {
 
   try {
     const body = typeof req.body === "string" ? JSON.parse(req.body) : req.body;
-    const { model, messages, max_tokens } = body || {};
+    const { model, messages, max_tokens, context_url } = body || {};
 
     if (!Array.isArray(messages) || messages.length === 0) {
       return res.status(400).json({ error: "messages required" });
+    }
+
+    // Optional: fetch the user's context website server-side and prepend its text.
+    // Guards: http(s) only, no private/internal hosts (SSRF), 5s timeout, hard size caps.
+    if (context_url && typeof context_url === "string" && /^https?:\/\//i.test(context_url)) {
+      const blocked = /^(https?:\/\/)(localhost|127\.|0\.|10\.|172\.(1[6-9]|2\d|3[01])\.|192\.168\.|169\.254\.|\[::1\]|.*\.internal\b)/i;
+      if (!blocked.test(context_url)) {
+        try {
+          const ctl = new AbortController();
+          const timer = setTimeout(() => ctl.abort(), 5000);
+          const page = await fetch(context_url, {
+            signal: ctl.signal,
+            redirect: "follow",
+            headers: { "user-agent": "Mozilla/5.0 (compatible; PtizeContextBot/1.0)" }
+          });
+          clearTimeout(timer);
+          if (page.ok) {
+            const raw = (await page.text()).slice(0, 300000);
+            const text = raw
+              .replace(/<script[\s\S]*?<\/script>/gi, " ")
+              .replace(/<style[\s\S]*?<\/style>/gi, " ")
+              .replace(/<[^>]+>/g, " ")
+              .replace(/&[a-z#0-9]+;/gi, " ")
+              .replace(/\s+/g, " ")
+              .trim()
+              .slice(0, 5000);
+            if (text && typeof messages[0].content === "string") {
+              messages[0].content =
+                "WEBSITE CONTEXT (fetched live from " + context_url + " — use it to tailor your response):\n" +
+                text + "\n\n---\n\n" + messages[0].content;
+            }
+          }
+        } catch { /* context fetch is best-effort; never block the AI call */ }
+      }
     }
 
     const allowed = (process.env.ALLOWED_MODELS || "claude-sonnet-4-6")
