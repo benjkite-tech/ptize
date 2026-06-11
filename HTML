@@ -1,0 +1,1073 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ptize — Ideas in. Decisions out.</title>
+<meta name="description" content="Rapid prioritisation: score ideas on desirability, feasibility and viability, weight what matters, and walk into the room with a rockstar way forward. By Yite Labs.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Grotesk:wght@400;500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#1C0F08;
+  --ground:#FAF8F3;
+  --ember:#E8501A;
+  --moss:#1A7A4A;
+  --denim:#2D4FA8;
+  --lavender:#7B5EA7;
+  --harvest:#C8A830;
+  --ash:#8A7260;
+  --chalk:#E4DDD0;
+  --display:'Bebas Neue', sans-serif;
+  --body:'Space Grotesk', sans-serif;
+  --mono:'Space Mono', monospace;
+  --maxw:1060px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion: reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation:none!important;transition:none!important}
+}
+body{
+  background:var(--ground);
+  color:var(--ink);
+  font-family:var(--body);
+  font-size:16px;
+  line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+}
+a{color:var(--denim)}
+button{font-family:inherit;cursor:pointer}
+:focus-visible{outline:3px solid var(--denim);outline-offset:2px}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px}
+
+/* ---------- masthead ---------- */
+.masthead{border-bottom:2px solid var(--ink);padding:28px 0 24px;position:relative;overflow:hidden}
+.brand-row{display:flex;align-items:flex-end;gap:18px}
+.kite{flex:0 0 auto}
+.kite .tail{transform-origin:32px 56px;animation:tailwave 3.2s ease-in-out infinite}
+@keyframes tailwave{0%,100%{transform:rotate(-4deg)}50%{transform:rotate(5deg)}}
+.brand-text h1{
+  font-family:var(--display);
+  font-size:clamp(64px,10vw,104px);
+  line-height:.86;
+  letter-spacing:.01em;
+  color:var(--ink);
+}
+.brand-text h1 .bang{color:var(--ember)}
+.stamp{
+  font-family:var(--mono);font-size:11px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--ash);margin-top:8px;
+}
+.stamp b{color:var(--ember);font-weight:700}
+.tagline{margin-top:18px;max-width:620px;font-size:18px;color:var(--ink)}
+.tagline strong{font-weight:700}
+
+/* ---------- capture ---------- */
+.capture{padding:26px 0 8px}
+.capture-row{display:flex;gap:10px;flex-wrap:wrap}
+.capture input[type=text]{
+  font-family:var(--body);font-size:16px;color:var(--ink);
+  background:#fff;border:2px solid var(--ink);border-radius:0;
+  padding:12px 14px;
+}
+.capture input::placeholder{color:var(--ash)}
+#ideaTitle{flex:2 1 280px}
+#ideaNote{flex:3 1 320px}
+.btn{
+  border:2px solid var(--ink);background:var(--ink);color:var(--ground);
+  font-family:var(--mono);font-size:13px;font-weight:700;letter-spacing:.08em;
+  text-transform:uppercase;padding:12px 18px;border-radius:0;
+  transition:transform .12s ease, background .12s ease;
+}
+.btn:hover{transform:translateY(-2px)}
+.btn:active{transform:translateY(0)}
+.btn.ember{background:var(--ember);border-color:var(--ember);color:#fff}
+.btn.ghost{background:transparent;color:var(--ink)}
+.btn.ghost:hover{background:var(--chalk)}
+.btn.small{padding:8px 12px;font-size:11px}
+.btn[disabled]{opacity:.45;cursor:not-allowed;transform:none}
+
+/* ---------- weight bar (signature) ---------- */
+.weights{padding:22px 0 6px}
+.weights-head{display:flex;align-items:baseline;justify-content:space-between;flex-wrap:wrap;gap:8px}
+.label-mono{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ash)}
+.step{font-family:var(--display);font-size:clamp(24px,3.4vw,30px);letter-spacing:.03em;line-height:1}
+.step .num{color:var(--ember)}
+.step-sub{font-size:14px;color:var(--ash);margin-top:4px}
+.defs{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:14px}
+.def{background:#fff;border:2px solid var(--ink);border-top-width:6px;padding:10px 12px}
+.def.d{border-top-color:var(--ember)}
+.def.f{border-top-color:var(--moss)}
+.def.v{border-top-color:var(--harvest)}
+.def-term{font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase}
+.def.d .def-term{color:var(--ember)}
+.def.f .def-term{color:var(--moss)}
+.def.v .def-term{color:var(--harvest)}
+.def-q{font-weight:700;font-size:15px;margin-top:2px}
+.def-body{font-size:13px;color:var(--ash);margin-top:2px}
+.credit{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--ash);margin-top:10px}
+.credit a{color:var(--ash)}
+@media (max-width:640px){.defs{grid-template-columns:1fr}}
+.weights-readout{font-family:var(--mono);font-size:12px;letter-spacing:.04em}
+.weights-readout span{font-weight:700}
+.weights-readout .wd{color:var(--ember)}
+.weights-readout .wf{color:var(--moss)}
+.weights-readout .wv{color:var(--harvest)}
+.wbar{
+  position:relative;display:flex;height:46px;margin-top:10px;
+  border:2px solid var(--ink);user-select:none;touch-action:none;background:#fff;
+}
+.wseg{display:flex;align-items:center;justify-content:center;overflow:hidden;min-width:0}
+.wseg .wseg-label{
+  font-family:var(--display);font-size:22px;letter-spacing:.04em;color:#fff;
+  white-space:nowrap;padding:0 8px;
+}
+.wseg.d{background:var(--ember)}
+.wseg.f{background:var(--moss)}
+.wseg.v{background:var(--harvest)}
+.whandle{
+  position:absolute;top:-8px;bottom:-8px;width:18px;margin-left:-9px;
+  cursor:ew-resize;display:flex;align-items:center;justify-content:center;
+  background:transparent;border:none;padding:0;z-index:2;
+}
+.whandle::after{
+  content:"";display:block;width:8px;height:100%;
+  background:var(--ink);border:2px solid var(--ground);
+}
+.whint{margin-top:8px;font-size:13px;color:var(--ash)}
+
+/* ---------- view tabs ---------- */
+.viewbar{
+  display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;
+  margin-top:26px;border-bottom:2px solid var(--ink);
+}
+.tabs{display:flex;gap:0}
+.tab{
+  font-family:var(--mono);font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+  background:transparent;border:none;color:var(--ash);
+  padding:12px 18px;border-bottom:4px solid transparent;margin-bottom:-2px;
+}
+.tab:hover{color:var(--ink)}
+.tab.active{color:var(--ink);border-bottom-color:var(--ember)}
+.exports{display:flex;gap:8px;padding-bottom:8px}
+
+/* ---------- stack ---------- */
+.panel{display:none;padding:22px 0 10px}
+.panel.active{display:block}
+.empty{
+  border:2px dashed var(--chalk);padding:42px 24px;text-align:center;color:var(--ash);
+  font-size:15px;margin-top:6px;
+}
+.empty b{color:var(--ink)}
+.card{
+  display:grid;grid-template-columns:64px 1fr auto auto 28px;gap:14px;align-items:center;
+  background:#fff;border:2px solid var(--ink);padding:14px 16px;margin-top:12px;
+  transition:transform .25s ease;
+}
+.card .rank{
+  font-family:var(--display);font-size:42px;line-height:1;color:var(--chalk);
+  text-align:center;
+}
+.card.tier-act .rank{color:var(--ember)}
+.card-main{min-width:0}
+.card-title{font-weight:700;font-size:17px;overflow-wrap:anywhere}
+.card-note{font-size:14px;color:var(--ash);margin-top:2px;overflow-wrap:anywhere}
+.card-review{
+  margin-top:8px;font-size:13px;color:var(--ink);background:var(--ground);
+  border-left:4px solid var(--denim);padding:6px 10px;
+}
+.card-review .label-mono{color:var(--denim)}
+.card-by{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--ash);white-space:nowrap}
+.card-title:hover,.card-note:hover{text-decoration:underline dotted var(--ash);cursor:text}
+.edit-form input{
+  width:100%;font-family:var(--body);font-size:15px;background:var(--ground);
+  border:2px solid var(--ink);padding:8px 10px;margin-bottom:6px;
+}
+.edit-actions{display:flex;gap:6px;margin-top:2px}
+.matrix-legend{
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));
+  gap:6px 18px;margin-top:14px;padding:0 4px;font-size:13px;list-style:none;
+}
+.matrix-legend li{display:flex;align-items:baseline;gap:8px;min-width:0}
+.ml-num{font-family:var(--mono);font-size:11px;font-weight:700;flex:0 0 18px}
+.ml-title{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ml-dot{flex:0 0 10px;width:10px;height:10px;align-self:center}
+.ml-dot.act{background:var(--moss)}
+.ml-dot.test{background:var(--harvest)}
+.ml-dot.park{background:var(--ash)}
+.dims{display:flex;gap:14px;flex-wrap:wrap}
+.dim{display:flex;flex-direction:column;gap:4px;align-items:flex-start}
+.dim-label{font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:.12em;color:var(--ash)}
+.pips{display:flex;gap:3px}
+.pip{
+  width:22px;height:22px;border:2px solid var(--ink);background:#fff;
+  padding:0;border-radius:0;transition:background .1s ease;
+}
+.dim[data-dim=d] .pip.on{background:var(--ember);border-color:var(--ember)}
+.dim[data-dim=f] .pip.on{background:var(--moss);border-color:var(--moss)}
+.dim[data-dim=v] .pip.on{background:var(--harvest);border-color:var(--harvest)}
+.card-score{display:flex;flex-direction:column;align-items:flex-end;gap:2px;min-width:72px}
+.score-num{font-family:var(--display);font-size:38px;line-height:1}
+.score-num.unscored{color:var(--chalk);font-size:24px}
+.tier{
+  font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
+  padding:3px 8px;color:#fff;
+}
+.tier.act{background:var(--moss)}
+.tier.test{background:var(--harvest);color:var(--ink)}
+.tier.park{background:var(--ash)}
+.tier.none{background:var(--chalk);color:var(--ash)}
+.card-del{
+  background:none;border:none;color:var(--chalk);font-size:20px;line-height:1;
+  align-self:start;padding:2px 6px;
+}
+.card-del:hover{color:var(--ember)}
+.stack-tools{display:flex;justify-content:flex-end;margin-top:16px;gap:8px}
+
+/* ---------- matrix ---------- */
+.matrix-wrap{margin-top:10px;background:#fff;border:2px solid var(--ink);padding:10px}
+.matrix-note{font-size:13px;color:var(--ash);margin-top:10px}
+.qlabel{font-family:var(--mono);font-size:10px;letter-spacing:.12em;fill:var(--ash);text-transform:uppercase}
+.dot{cursor:default}
+.dot text{font-family:var(--mono);font-size:10px;font-weight:700;fill:#fff}
+.axis{font-family:var(--mono);font-size:10px;letter-spacing:.1em;fill:var(--ash);text-transform:uppercase}
+
+/* ---------- memo ---------- */
+.memo-card{background:#fff;border:2px solid var(--ink);padding:28px;margin-top:10px}
+.memo-card h2{font-family:var(--display);font-size:34px;letter-spacing:.02em;margin-bottom:4px}
+.memo-card h3{font-family:var(--mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--ember);margin:22px 0 8px}
+.memo-card p{margin:10px 0}
+.memo-card ul{margin:10px 0 10px 20px}
+.memo-card li{margin:5px 0}
+.memo-meta{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ash);margin-bottom:18px}
+.memo-empty{color:var(--ash);font-size:15px}
+.memo-tools{display:flex;gap:8px;margin-top:16px;flex-wrap:wrap}
+
+/* ---------- footer ---------- */
+footer{margin-top:48px;border-top:2px solid var(--ink);padding:20px 0 36px}
+.foot-row{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.foot-row .label-mono a{color:var(--ash);text-decoration:none;border-bottom:1px solid var(--chalk)}
+#keyStatus.ok{color:var(--moss)}
+
+/* ---------- modal ---------- */
+.modal{
+  position:fixed;inset:0;background:rgba(28,15,8,.55);display:none;
+  align-items:flex-start;justify-content:center;padding:8vh 20px;z-index:50;
+}
+.modal.open{display:flex}
+.modal-box{background:var(--ground);border:2px solid var(--ink);max-width:520px;width:100%;padding:26px}
+.modal-box h2{font-family:var(--display);font-size:32px;margin-bottom:6px}
+.modal-box p{font-size:14px;color:var(--ash);margin-bottom:14px}
+.modal-box input[type=text],.modal-box input[type=password],.modal-box textarea{
+  width:100%;font-family:var(--body);font-size:15px;background:#fff;
+  border:2px solid var(--ink);padding:11px 12px;margin-bottom:12px;
+}
+.modal-box textarea{min-height:84px;resize:vertical}
+.modal-actions{display:flex;gap:8px;justify-content:flex-end}
+.spin{display:inline-block;animation:spin 1s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.toast{
+  position:fixed;left:50%;bottom:28px;transform:translateX(-50%);
+  background:var(--ink);color:var(--ground);font-family:var(--mono);font-size:12px;
+  letter-spacing:.06em;padding:10px 16px;z-index:60;display:none;
+}
+.toast.show{display:block}
+
+/* ---------- responsive ---------- */
+@media (max-width:760px){
+  .card{grid-template-columns:44px 1fr auto 28px}
+  .card .rank{font-size:30px}
+  .dims{grid-column:1 / -1;order:4}
+  .card-score{min-width:60px}
+  .score-num{font-size:30px}
+}
+@media (pointer:coarse){
+  .pip{width:30px;height:30px}
+}
+.toast button{
+  background:none;border:none;color:var(--harvest);font-family:var(--mono);
+  font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
+  margin-left:12px;text-decoration:underline;padding:0;
+}
+
+/* ---------- print ---------- */
+#printReport{display:none}
+@media print{
+  body > .app{display:none}
+  .toast,.modal{display:none!important}
+  #printReport{display:block;font-family:var(--body);color:var(--ink)}
+  @page{margin:18mm}
+  #printReport h1{font-family:var(--display);font-size:42px;line-height:1}
+  #printReport .pr-stamp{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--ash);margin:4px 0 18px}
+  #printReport h2{font-family:var(--mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--ember);margin:22px 0 8px;border-bottom:1px solid var(--chalk);padding-bottom:4px}
+  #printReport table{width:100%;border-collapse:collapse;font-size:12px}
+  #printReport th{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;text-align:left;border-bottom:2px solid var(--ink);padding:6px 8px}
+  #printReport td{border-bottom:1px solid var(--chalk);padding:6px 8px;vertical-align:top}
+  #printReport .pr-tier{font-family:var(--mono);font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase}
+  #printReport .memo-print p{margin:8px 0;font-size:13px}
+  #printReport .memo-print ul{margin:8px 0 8px 18px;font-size:13px}
+  #printReport .memo-print h3{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ember);margin:16px 0 6px}
+}
+</style>
+</head>
+<body>
+<div class="app">
+<header class="masthead">
+  <div class="wrap">
+    <div class="brand-row">
+      <svg class="kite" width="64" height="78" viewBox="0 0 64 78" aria-hidden="true">
+        <g class="tail">
+          <path d="M32 56 C 30 64, 36 66, 33 74" fill="none" stroke="#1C0F08" stroke-width="2"/>
+          <rect x="27" y="61" width="7" height="4" fill="#2D4FA8" transform="rotate(-18 30 63)"/>
+          <rect x="31" y="69" width="7" height="4" fill="#7B5EA7" transform="rotate(14 34 71)"/>
+        </g>
+        <polygon points="32,2 60,28 32,56 4,28" fill="#1C0F08"/>
+        <polygon points="32,5 57,28 32,28" fill="#E8501A"/>
+        <polygon points="32,5 7,28 32,28" fill="#1A7A4A"/>
+        <polygon points="7,28 32,28 32,53" fill="#C8A830"/>
+        <polygon points="57,28 32,28 32,53" fill="#2D4FA8"/>
+        <circle cx="24" cy="22" r="2.6" fill="#1C0F08"/>
+        <circle cx="40" cy="22" r="2.6" fill="#1C0F08"/>
+        <path d="M25 33 Q 32 39, 39 33" fill="none" stroke="#1C0F08" stroke-width="2.4" stroke-linecap="round"/>
+      </svg>
+      <div class="brand-text">
+        <h1>PTIZE<span class="bang">!</span></h1>
+        <div class="stamp">PRIORITISATION TOOL · BY YITE LABS</div>
+      </div>
+    </div>
+    <p class="tagline"><strong>Ideas in. Decisions out.</strong> Score everything on what's desirable, feasible and viable — weighted your way — and walk into the room with a rockstar way forward.</p>
+  </div>
+</header>
+
+<section class="weights">
+  <div class="wrap">
+    <div class="weights-head">
+      <div>
+        <div class="step"><span class="num">01</span> — WEIGHT WHAT MATTERS</div>
+        <div class="step-sub">Three lenses, one call: how much should each count this quarter?</div>
+      </div>
+      <div class="weights-readout" id="wReadout"></div>
+    </div>
+    <div class="defs">
+      <div class="def d">
+        <div class="def-term">Desirable</div>
+        <div class="def-q">Do people actually want it?</div>
+        <div class="def-body">Customer pull — demand, pain relieved, delight created.</div>
+      </div>
+      <div class="def f">
+        <div class="def-term">Feasible</div>
+        <div class="def-q">Can we actually do it?</div>
+        <div class="def-body">Capability and capacity — skills, tech, time, effort to ship.</div>
+      </div>
+      <div class="def v">
+        <div class="def-term">Viable</div>
+        <div class="def-q">Does it stack up?</div>
+        <div class="def-body">The commercials — margin, cost to serve, sustainable economics.</div>
+      </div>
+    </div>
+    <div class="wbar" id="wbar" aria-label="Weighting between desirable, feasible and viable">
+      <div class="wseg d" id="segD"><span class="wseg-label">DESIRABLE</span></div>
+      <div class="wseg f" id="segF"><span class="wseg-label">FEASIBLE</span></div>
+      <div class="wseg v" id="segV"><span class="wseg-label">VIABLE</span></div>
+      <button class="whandle" id="h1" aria-label="Adjust desirable vs feasible weighting. Arrow keys to change."></button>
+      <button class="whandle" id="h2" aria-label="Adjust feasible vs viable weighting. Arrow keys to change."></button>
+    </div>
+    <p class="whint">Drag the handles — the stack re-ranks live. Customer-led quarter? Push Desirable. Cash-tight? Push Viable.</p>
+    <div class="credit">Desirability · Feasibility · Viability framework — credit <a href="https://www.ideou.com" target="_blank" rel="noopener">IDEO U</a></div>
+  </div>
+</section>
+
+<section class="capture">
+  <div class="wrap">
+    <div class="step"><span class="num">02</span> — CAPTURE</div>
+    <div class="step-sub">Type ideas fast — Enter to add. Or let Claude open the bidding.</div>
+    <div class="capture-row" style="margin-top:12px">
+      <input type="text" id="ideaTitle" placeholder="Type an idea — e.g. 24-hour shipping" aria-label="Idea title">
+      <input type="text" id="ideaNote" placeholder="Optional note — problem, context, how it'd work" aria-label="Idea note">
+      <input type="text" id="ideaBy" placeholder="Added by" aria-label="Added by" style="flex:1 1 130px;max-width:170px">
+      <button class="btn" id="addBtn">Add idea</button>
+      <button class="btn ember" id="sparkBtn">✦ Spark ideas</button>
+    </div>
+  </div>
+</section>
+
+<div class="wrap">
+  <div class="step" style="margin-top:30px"><span class="num">03</span> — BUILD YOUR PRIORITISATION</div>
+  <div class="step-sub">Score each idea 1–5 on the three lenses. The stack ranks itself — then flip to the Matrix or generate the Memo.</div>
+  <nav class="viewbar">
+    <div class="tabs" role="tablist">
+      <button class="tab active" data-view="stack" role="tab">The Stack</button>
+      <button class="tab" data-view="matrix" role="tab">The Matrix</button>
+      <button class="tab" data-view="memo" role="tab">The Memo</button>
+    </div>
+    <div class="exports">
+      <button class="btn ghost small" id="csvBtn">↓ CSV for Sheets</button>
+      <button class="btn ghost small" id="pdfBtn">↓ PDF pack</button>
+    </div>
+  </nav>
+
+  <section class="panel active" id="panel-stack" role="tabpanel">
+    <div id="stackList"></div>
+    <div class="stack-tools">
+      <button class="btn ghost small" id="reviewBtn">⚖ Pressure-test my scores</button>
+    </div>
+  </section>
+
+  <section class="panel" id="panel-matrix" role="tabpanel">
+    <div class="matrix-wrap"><svg id="matrixSvg" viewBox="0 0 720 520" width="100%" role="img" aria-label="Priority matrix plotting attractiveness against feasibility"></svg></div>
+    <ul class="matrix-legend" id="matrixLegend"></ul>
+    <p class="matrix-note">Vertical: attractiveness (your weighted blend of desirable + viable). Horizontal: feasibility. Numbers match the Stack ranking.</p>
+  </section>
+
+  <section class="panel" id="panel-memo" role="tabpanel">
+    <div class="memo-card" id="memoCard">
+      <div class="memo-empty" id="memoEmpty">The Memo turns your scored stack into a one-page recommendation — what to do now, what to test, what to park, and why. Score a few ideas, then generate it.</div>
+      <div id="memoBody"></div>
+    </div>
+    <div class="memo-tools">
+      <button class="btn ember" id="memoBtn">✦ Generate memo</button>
+      <button class="btn ghost small" id="memoCopyBtn">Copy text</button>
+    </div>
+  </section>
+</div>
+
+<footer>
+  <div class="wrap foot-row">
+    <div class="label-mono">Ptize · by <a href="https://yitelabs.co" target="_blank" rel="noopener">Yite Labs</a> · D·F·V framework credit <a href="https://www.ideou.com" target="_blank" rel="noopener">IDEO U</a></div>
+    <div class="label-mono"><button class="btn ghost small" id="settingsBtn">AI settings</button> <span id="keyStatus"></span></div>
+  </div>
+</footer>
+</div>
+
+<!-- modals -->
+<div class="modal" id="settingsModal" role="dialog" aria-modal="true" aria-labelledby="settingsH">
+  <div class="modal-box">
+    <h2 id="settingsH">AI SETTINGS</h2>
+    <p>When Ptize is deployed, AI runs on the built-in connection — nothing to set up. This optional key is a personal fallback (e.g. if you open the raw file locally). It's stored only on this device and sent only to api.anthropic.com.</p>
+    <input type="password" id="keyInput" placeholder="sk-ant-..." aria-label="Anthropic API key">
+    <div class="modal-actions">
+      <button class="btn ghost small" id="keyClearBtn">Clear key</button>
+      <button class="btn small" id="keySaveBtn">Save</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="sparkModal" role="dialog" aria-modal="true" aria-labelledby="sparkH">
+  <div class="modal-box">
+    <h2 id="sparkH">SPARK IDEAS</h2>
+    <p>Describe the goal or problem space. Claude drafts five ideas straight into your stack — unscored, ready for the team to rate.</p>
+    <textarea id="sparkContext" placeholder="e.g. Reduce churn for our SMB customers in the first 90 days"></textarea>
+    <div class="modal-actions">
+      <button class="btn ghost small" data-close>Cancel</button>
+      <button class="btn ember small" id="sparkGoBtn">✦ Generate 5 ideas</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+<div id="printReport"></div>
+
+<script>
+(function(){
+"use strict";
+
+/* ---------------- state ---------------- */
+const LS_STATE = "ptize_state_v1";
+const LS_KEY = "ptize_api_key";
+const MODEL = "claude-sonnet-4-6";
+// When deployed on Vercel with api/claude.js present, the proxy holds the key
+// server-side and visitors get AI with zero setup. Set to false to force BYO-key.
+const PROXY_ENABLED = true;
+const PROXY_URL = "/api/claude";
+
+let state = {
+  ideas: [],            // {id, title, note, d, f, v}  scores: null or 1..5
+  weights: {d: 34, f: 33, v: 33},
+  reviews: {},          // id -> one-line AI challenge
+  memo: null            // markdown string
+};
+
+function load(){
+  try{
+    const raw = localStorage.getItem(LS_STATE);
+    if(raw){ const s = JSON.parse(raw); if(s && s.ideas) state = Object.assign(state, s); }
+  }catch(e){}
+}
+function save(){ try{ localStorage.setItem(LS_STATE, JSON.stringify(state)); }catch(e){} }
+function uid(){ return Math.random().toString(36).slice(2,9); }
+
+/* ---------------- scoring ---------------- */
+function scored(i){ return i.d && i.f && i.v; }
+function weightedScore(i){
+  const w = state.weights;
+  return (i.d*w.d + i.f*w.f + i.v*w.v) / (w.d + w.f + w.v);
+}
+function tierOf(s){
+  if(s >= 4.0) return {key:"act", label:"Act now"};
+  if(s >= 3.0) return {key:"test", label:"Test it"};
+  return {key:"park", label:"Park it"};
+}
+function rankedIdeas(){
+  const sc = state.ideas.filter(scored).map(i => ({...i, score: weightedScore(i)}));
+  sc.sort((a,b) => b.score - a.score);
+  const un = state.ideas.filter(i => !scored(i));
+  return {scoredList: sc, unscoredList: un};
+}
+
+/* ---------------- dom helpers ---------------- */
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+let toastTimer;
+function toast(msg, actionLabel, actionFn){
+  const t = $("#toast");
+  t.textContent = msg;
+  if(actionLabel){
+    const b = document.createElement("button");
+    b.textContent = actionLabel;
+    b.addEventListener("click", () => { actionFn(); t.classList.remove("show"); });
+    t.appendChild(b);
+  }
+  t.classList.add("show");
+  clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.remove("show"), actionLabel ? 5000 : 2600);
+}
+
+/* ---------------- render: weights ---------------- */
+function renderWeights(){
+  const w = state.weights;
+  $("#segD").style.flexBasis = w.d + "%";
+  $("#segF").style.flexBasis = w.f + "%";
+  $("#segV").style.flexBasis = w.v + "%";
+  const h1 = $("#h1"), h2 = $("#h2");
+  h1.style.left = w.d + "%";
+  h2.style.left = (w.d + w.f) + "%";
+  h1.setAttribute("aria-valuenow", w.d);
+  h2.setAttribute("aria-valuenow", w.d + w.f);
+  $("#wReadout").innerHTML =
+    'D <span class="wd">' + w.d + '</span> · F <span class="wf">' + w.f + '</span> · V <span class="wv">' + w.v + '</span>';
+}
+
+function setupWeightBar(){
+  const bar = $("#wbar");
+  const MIN = 10;
+  function applyBoundary(which, pct){
+    const w = state.weights;
+    if(which === 1){
+      const d = Math.max(MIN, Math.min(pct, w.d + w.f - MIN));
+      const f = w.d + w.f - d;
+      state.weights = {d: Math.round(d), f: Math.round(f), v: w.v};
+    }else{
+      const b = Math.max(w.d + MIN, Math.min(pct, 100 - MIN));
+      const f = b - w.d, v = 100 - b;
+      state.weights = {d: w.d, f: Math.round(f), v: Math.round(v)};
+    }
+    const t = state.weights;
+    t.v = 100 - t.d - t.f; // keep an exact 100
+    renderWeights(); renderAll(); save();
+  }
+  function drag(which){
+    return function(e){
+      e.preventDefault();
+      const rect = bar.getBoundingClientRect();
+      function move(ev){
+        applyBoundary(which, (ev.clientX - rect.left) / rect.width * 100);
+      }
+      function up(){
+        document.removeEventListener("pointermove", move);
+        document.removeEventListener("pointerup", up);
+        document.removeEventListener("pointercancel", up);
+      }
+      document.addEventListener("pointermove", move);
+      document.addEventListener("pointerup", up);
+      document.addEventListener("pointercancel", up);
+    };
+  }
+  [["#h1"],["#h2"]].forEach((sel, i) => {
+    const h = $(sel[0]);
+    h.setAttribute("role", "slider");
+    h.setAttribute("aria-valuemin", "10");
+    h.setAttribute("aria-valuemax", "90");
+  });
+  $("#h1").addEventListener("pointerdown", drag(1));
+  $("#h2").addEventListener("pointerdown", drag(2));
+  function keys(which){
+    return function(e){
+      const w = state.weights;
+      const base = which === 1 ? w.d : w.d + w.f;
+      if(e.key === "ArrowLeft"){ applyBoundary(which, base - 5); e.preventDefault(); }
+      if(e.key === "ArrowRight"){ applyBoundary(which, base + 5); e.preventDefault(); }
+    };
+  }
+  $("#h1").addEventListener("keydown", keys(1));
+  $("#h2").addEventListener("keydown", keys(2));
+}
+
+/* ---------------- render: stack ---------------- */
+function pipRow(idea, dim){
+  let html = '<div class="dim" data-dim="' + dim + '"><span class="dim-label">' +
+    ({d:"Desirable", f:"Feasible", v:"Viable"})[dim] + '</span><div class="pips">';
+  for(let n = 1; n <= 5; n++){
+    const on = idea[dim] && n <= idea[dim] ? " on" : "";
+    html += '<button class="pip' + on + '" data-id="' + idea.id + '" data-dim="' + dim + '" data-n="' + n +
+      '" aria-pressed="' + (on ? "true" : "false") + '" aria-label="' + dim.toUpperCase() + ' score ' + n + '"></button>';
+  }
+  return html + '</div></div>';
+}
+let editingId = null;
+function cardHtml(idea, rank){
+  const isScored = scored(idea);
+  const score = isScored ? weightedScore(idea) : null;
+  const tier = isScored ? tierOf(score) : {key:"none", label:"Unscored"};
+  const review = state.reviews[idea.id];
+  let main;
+  if(idea.id === editingId){
+    main = '<div class="card-main edit-form">' +
+      '<input class="edit-title" value="' + esc(idea.title) + '" aria-label="Edit idea title">' +
+      '<input class="edit-note" value="' + esc(idea.note || "") + '" placeholder="Optional note" aria-label="Edit note">' +
+      '<input class="edit-by" value="' + esc(idea.by || "") + '" placeholder="Added by" aria-label="Edit added by" style="max-width:170px">' +
+      '<div class="edit-actions"><button class="btn small edit-save" data-id="' + idea.id + '">Save</button>' +
+      '<button class="btn ghost small edit-cancel">Cancel</button></div></div>';
+  }else{
+    main = '<div class="card-main"><div class="card-title" title="Click to edit">' + esc(idea.title) +
+      (idea.by ? ' <span class="card-by">· ' + esc(idea.by) + '</span>' : "") + '</div>' +
+      (idea.note ? '<div class="card-note" title="Click to edit">' + esc(idea.note) + '</div>' : "") +
+      (review ? '<div class="card-review"><span class="label-mono">Pressure-test</span> ' + esc(review) + '</div>' : "") +
+      '</div>';
+  }
+  return '<div class="card tier-' + tier.key + '" data-id="' + idea.id + '">' +
+    '<div class="rank">' + (rank || "·") + '</div>' +
+    main +
+    '<div class="dims">' + pipRow(idea,"d") + pipRow(idea,"f") + pipRow(idea,"v") + '</div>' +
+    '<div class="card-score">' +
+      (isScored ? '<div class="score-num">' + score.toFixed(1) + '</div>' : '<div class="score-num unscored">—</div>') +
+      '<div class="tier ' + tier.key + '">' + tier.label + '</div>' +
+    '</div>' +
+    '<button class="card-del" data-del="' + idea.id + '" aria-label="Delete idea">×</button>' +
+    '</div>';
+}
+function renderStack(){
+  const el = $("#stackList");
+  const {scoredList, unscoredList} = rankedIdeas();
+  if(state.ideas.length === 0){
+    el.innerHTML = '<div class="empty"><b>Nothing in the stack yet.</b><br>Type an idea above, hit <b>✦ Spark ideas</b> — or <button class="btn ghost small" id="loadSampleBtn" style="margin-top:10px">Load a sample stack</button> to see the weight bar do its thing.</div>';
+    return;
+  }
+  let html = "";
+  scoredList.forEach((i, idx) => html += cardHtml(i, idx + 1));
+  unscoredList.forEach(i => html += cardHtml(i, null));
+  el.innerHTML = html;
+}
+
+const SAMPLE = [
+  {title:"Annual plan discount", note:"Trade margin for retention — 12 months up front.", d:3, f:5, v:4},
+  {title:"Self-serve onboarding", note:"Cut time-to-value without adding headcount.", d:4, f:3, v:5},
+  {title:"Referral programme", note:"Customers recruit customers, paid on conversion.", d:4, f:4, v:3},
+  {title:"Win-back email series", note:"Automated sequence for 90-day-lapsed accounts.", d:3, f:5, v:3},
+  {title:"24-hour delivery promise", note:"Big customer pull, big ops lift.", d:4, f:2, v:3},
+  {title:"Enterprise tier", note:"Bigger contracts, longer sales cycle, heavier support.", d:3, f:2, v:5},
+  {title:"Rebrand the company", note:"Feels exciting. Solves nothing customers asked for.", d:2, f:2, v:2}
+];
+function loadSample(){
+  SAMPLE.forEach(s => state.ideas.push({id: uid(), title: s.title, note: s.note, by: "Sample", d: s.d, f: s.f, v: s.v}));
+  save(); renderStack(); renderMatrix();
+  toast("Sample stack loaded — now drag the weight handles");
+}
+
+/* ---------------- render: matrix ---------------- */
+function renderMatrix(){
+  const svg = $("#matrixSvg");
+  const W = 720, H = 520, P = {l: 64, r: 24, t: 30, b: 56};
+  const iw = W - P.l - P.r, ih = H - P.t - P.b;
+  const w = state.weights;
+  const {scoredList} = rankedIdeas();
+  const X = f => P.l + (f - 1) / 4 * iw;
+  const Y = a => P.t + ih - (a - 1) / 4 * ih;
+  let s = "";
+  // quadrant tint
+  s += '<rect x="' + X(3) + '" y="' + P.t + '" width="' + (X(5)-X(3)) + '" height="' + (Y(3)-P.t) + '" fill="#E8501A" opacity="0.06"/>';
+  // frame + midlines
+  s += '<rect x="' + P.l + '" y="' + P.t + '" width="' + iw + '" height="' + ih + '" fill="none" stroke="#1C0F08" stroke-width="2"/>';
+  s += '<line x1="' + X(3) + '" y1="' + P.t + '" x2="' + X(3) + '" y2="' + (P.t+ih) + '" stroke="#E4DDD0" stroke-width="2"/>';
+  s += '<line x1="' + P.l + '" y1="' + Y(3) + '" x2="' + (P.l+iw) + '" y2="' + Y(3) + '" stroke="#E4DDD0" stroke-width="2"/>';
+  // quadrant labels
+  s += '<text class="qlabel" x="' + (X(5)-10) + '" y="' + (P.t+18) + '" text-anchor="end">Do now</text>';
+  s += '<text class="qlabel" x="' + (P.l+10) + '" y="' + (P.t+18) + '">Big bets</text>';
+  s += '<text class="qlabel" x="' + (X(5)-10) + '" y="' + (P.t+ih-10) + '" text-anchor="end">Quick fills</text>';
+  s += '<text class="qlabel" x="' + (P.l+10) + '" y="' + (P.t+ih-10) + '">Park</text>';
+  // axes
+  s += '<text class="axis" x="' + (P.l + iw/2) + '" y="' + (H-16) + '" text-anchor="middle">Feasibility →</text>';
+  s += '<text class="axis" transform="rotate(-90 20 ' + (P.t + ih/2) + ')" x="20" y="' + (P.t + ih/2) + '" text-anchor="middle">Attractiveness (D+V weighted) →</text>';
+  // dots — fan out any that share coordinates so none hide behind another
+  const tierFill = {act:"#1A7A4A", test:"#C8A830", park:"#8A7260"};
+  const seen = {};
+  scoredList.forEach((i, idx) => {
+    const attract = (i.d*w.d + i.v*w.v) / (w.d + w.v);
+    let cx = X(i.f), cy = Y(attract);
+    const key = Math.round(cx) + "," + Math.round(cy);
+    const n = seen[key] = (seen[key] || 0) + 1;
+    if(n > 1){
+      const ang = (n - 2) * (Math.PI / 3);
+      cx += Math.cos(ang) * 30; cy += Math.sin(ang) * 30;
+    }
+    const tier = tierOf(i.score).key;
+    s += '<g class="dot"><title>' + esc(i.title) + ' — ' + i.score.toFixed(1) + '</title>' +
+      '<circle cx="' + cx + '" cy="' + cy + '" r="14" fill="' + tierFill[tier] + '" stroke="#1C0F08" stroke-width="2"/>' +
+      '<text x="' + cx + '" y="' + (cy+3.5) + '" text-anchor="middle">' + (idx+1) + '</text></g>';
+  });
+  if(scoredList.length === 0){
+    s += '<text x="' + (P.l + iw/2) + '" y="' + (P.t + ih/2) + '" text-anchor="middle" fill="#8A7260" font-family="Space Grotesk" font-size="15">Score at least one idea on all three dimensions to plot it.</text>';
+  }
+  svg.innerHTML = s;
+  $("#matrixLegend").innerHTML = scoredList.map((i, idx) =>
+    '<li><span class="ml-num">' + (idx+1) + '</span><span class="ml-dot ' + tierOf(i.score).key + '"></span><span class="ml-title">' + esc(i.title) + '</span></li>'
+  ).join("");
+}
+
+/* ---------------- render: memo ---------------- */
+function mdToHtml(md){
+  const lines = md.split(/\r?\n/);
+  let html = "", inUl = false;
+  function closeUl(){ if(inUl){ html += "</ul>"; inUl = false; } }
+  lines.forEach(line => {
+    const l = line.trim();
+    if(!l){ closeUl(); return; }
+    if(/^#{1,3}\s/.test(l)){ closeUl(); html += "<h3>" + esc(l.replace(/^#{1,3}\s/, "")) + "</h3>"; return; }
+    if(/^[-*]\s/.test(l)){
+      if(!inUl){ html += "<ul>"; inUl = true; }
+      html += "<li>" + inline(l.replace(/^[-*]\s/, "")) + "</li>"; return;
+    }
+    closeUl(); html += "<p>" + inline(l) + "</p>";
+  });
+  closeUl();
+  return html;
+  function inline(t){ return esc(t).replace(/\*\*(.+?)\*\*/g, "<b>$1</b>"); }
+}
+function renderMemo(){
+  const has = !!state.memo;
+  $("#memoEmpty").style.display = has ? "none" : "block";
+  $("#memoBody").innerHTML = has
+    ? '<h2>THE MEMO</h2><div class="memo-meta">Ptize · ' + new Date().toLocaleDateString("en-AU", {day:"numeric", month:"short", year:"numeric"}) + ' · weights D' + state.weights.d + '/F' + state.weights.f + '/V' + state.weights.v + '</div>' + mdToHtml(state.memo)
+    : "";
+}
+
+function renderAll(){ renderStack(); renderMatrix(); renderMemo(); }
+
+/* ---------------- events: capture ---------------- */
+function addIdea(){
+  const t = $("#ideaTitle").value.trim();
+  if(!t){ $("#ideaTitle").focus(); return; }
+  const by = $("#ideaBy").value.trim();
+  if(by) try{ localStorage.setItem("ptize_author", by); }catch(e){}
+  state.ideas.push({id: uid(), title: t, note: $("#ideaNote").value.trim(), by: by, d: null, f: null, v: null});
+  $("#ideaTitle").value = ""; $("#ideaNote").value = "";
+  $("#ideaTitle").focus();
+  save(); renderStack(); renderMatrix();
+}
+$("#addBtn").addEventListener("click", addIdea);
+["ideaTitle","ideaNote","ideaBy"].forEach(id => {
+  document.getElementById(id).addEventListener("keydown", e => { if(e.key === "Enter") addIdea(); });
+});
+try{ $("#ideaBy").value = localStorage.getItem("ptize_author") || ""; }catch(e){}
+
+/* pips + delete + edit + sample (delegated) */
+$("#stackList").addEventListener("click", e => {
+  if(e.target.closest("#loadSampleBtn")){ loadSample(); return; }
+  const pip = e.target.closest(".pip");
+  if(pip){
+    const idea = state.ideas.find(i => i.id === pip.dataset.id);
+    if(idea){
+      const n = +pip.dataset.n;
+      idea[pip.dataset.dim] = (idea[pip.dataset.dim] === n) ? null : n;
+      save(); renderStack(); renderMatrix();
+    }
+    return;
+  }
+  const saveBtn = e.target.closest(".edit-save");
+  if(saveBtn){ commitEdit(saveBtn.dataset.id); return; }
+  if(e.target.closest(".edit-cancel")){ editingId = null; renderStack(); return; }
+  if(e.target.closest(".edit-form")) return;
+  const editable = e.target.closest(".card-title, .card-note");
+  if(editable){
+    editingId = editable.closest(".card").dataset.id;
+    renderStack();
+    const f = $("#stackList .edit-title");
+    if(f){ f.focus(); f.select(); }
+    return;
+  }
+  const del = e.target.closest(".card-del");
+  if(del){
+    const idx = state.ideas.findIndex(i => i.id === del.dataset.del);
+    if(idx < 0) return;
+    const removed = state.ideas[idx];
+    const removedReview = state.reviews[removed.id];
+    state.ideas.splice(idx, 1);
+    delete state.reviews[removed.id];
+    save(); renderStack(); renderMatrix();
+    toast('Deleted "' + removed.title.slice(0, 28) + (removed.title.length > 28 ? "…" : "") + '"', "Undo", () => {
+      state.ideas.splice(Math.min(idx, state.ideas.length), 0, removed);
+      if(removedReview) state.reviews[removed.id] = removedReview;
+      save(); renderStack(); renderMatrix();
+    });
+  }
+});
+
+function commitEdit(id){
+  const idea = state.ideas.find(i => i.id === id);
+  const form = $("#stackList .edit-form");
+  if(!idea || !form){ editingId = null; renderStack(); return; }
+  const t = form.querySelector(".edit-title").value.trim();
+  if(t) idea.title = t;
+  idea.note = form.querySelector(".edit-note").value.trim();
+  idea.by = form.querySelector(".edit-by").value.trim();
+  editingId = null;
+  save(); renderStack(); renderMatrix();
+}
+$("#stackList").addEventListener("keydown", e => {
+  if(!e.target.closest(".edit-form")) return;
+  if(e.key === "Enter"){ e.preventDefault(); commitEdit(editingId); }
+  if(e.key === "Escape"){ editingId = null; renderStack(); }
+});
+
+/* tabs */
+document.querySelectorAll(".tab").forEach(tab => {
+  tab.setAttribute("aria-selected", tab.classList.contains("active") ? "true" : "false");
+  tab.addEventListener("click", () => {
+    document.querySelectorAll(".tab").forEach(t => { t.classList.remove("active"); t.setAttribute("aria-selected", "false"); });
+    document.querySelectorAll(".panel").forEach(p => p.classList.remove("active"));
+    tab.classList.add("active");
+    tab.setAttribute("aria-selected", "true");
+    document.getElementById("panel-" + tab.dataset.view).classList.add("active");
+  });
+});
+
+/* modals */
+function openModal(id){ document.getElementById(id).classList.add("open"); }
+function closeModals(){ document.querySelectorAll(".modal").forEach(m => m.classList.remove("open")); }
+document.querySelectorAll(".modal").forEach(m => {
+  m.addEventListener("click", e => { if(e.target === m || e.target.dataset.close !== undefined && e.target.hasAttribute("data-close")) closeModals(); });
+});
+document.addEventListener("keydown", e => { if(e.key === "Escape") closeModals(); });
+
+/* ---------------- AI ---------------- */
+function getKey(){ return localStorage.getItem(LS_KEY) || ""; }
+function aiReady(){ return PROXY_ENABLED || !!getKey(); }
+function keyStatus(){
+  const el = $("#keyStatus");
+  if(PROXY_ENABLED){ el.textContent = "● AI ready"; el.className = "ok"; return; }
+  if(getKey()){ el.textContent = "● AI on"; el.className = "ok"; }
+  else { el.textContent = "○ AI off — add a key"; el.className = ""; }
+}
+$("#settingsBtn").addEventListener("click", () => { $("#keyInput").value = getKey(); openModal("settingsModal"); });
+$("#keySaveBtn").addEventListener("click", () => {
+  const k = $("#keyInput").value.trim();
+  if(k) localStorage.setItem(LS_KEY, k);
+  keyStatus(); closeModals(); toast(k ? "Key saved on this device" : "No key entered");
+});
+$("#keyClearBtn").addEventListener("click", () => {
+  localStorage.removeItem(LS_KEY); $("#keyInput").value = "";
+  keyStatus(); toast("Key cleared");
+});
+
+async function askClaude(prompt, maxTokens, model){
+  const payload = {
+    model: model || MODEL,
+    max_tokens: maxTokens || 1200,
+    messages: [{role: "user", content: prompt}]
+  };
+
+  // 1) Try the serverless proxy (key lives server-side, zero setup for visitors).
+  //    Works when Ptize is deployed on Vercel with /api/claude present.
+  if(PROXY_ENABLED){
+    try{
+      const res = await fetch(PROXY_URL, {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify(payload)
+      });
+      if(res.ok){
+        const data = await res.json();
+        return (data.content || []).filter(b => b.type === "text").map(b => b.text).join("\n");
+      }
+      if(res.status === 429){ throw new Error("RATE: Slow down — too many AI requests. Give it a minute."); }
+      // any other proxy error → fall through to BYO-key if we have one
+    }catch(err){
+      if(String(err.message).startsWith("RATE")) throw err;
+      // network/no-proxy (e.g. opened as a local file) → fall through
+    }
+  }
+
+  // 2) Fallback: user's own key, called directly from the browser.
+  const key = getKey();
+  if(!key){ openModal("settingsModal"); throw new Error("NO_KEY"); }
+  const res = await fetch("https://api.anthropic.com/v1/messages", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "x-api-key": key,
+      "anthropic-version": "2023-06-01",
+      "anthropic-dangerous-direct-browser-access": "true"
+    },
+    body: JSON.stringify(payload)
+  });
+  if(!res.ok){
+    const err = await res.text();
+    throw new Error("API " + res.status + ": " + err.slice(0, 200));
+  }
+  const data = await res.json();
+  return (data.content || []).filter(b => b.type === "text").map(b => b.text).join("\n");
+}
+function parseJson(text){
+  const clean = text.replace(/```json|```/g, "").trim();
+  const start = clean.indexOf("["), end = clean.lastIndexOf("]");
+  return JSON.parse(start >= 0 ? clean.slice(start, end + 1) : clean);
+}
+function busy(btn, on, idleHtml){
+  btn.disabled = on;
+  btn.innerHTML = on ? '<span class="spin">✦</span> Thinking…' : idleHtml;
+}
+
+/* spark */
+$("#sparkBtn").addEventListener("click", () => {
+  if(!aiReady()){ openModal("settingsModal"); return; }
+  openModal("sparkModal"); $("#sparkContext").focus();
+});
+$("#sparkGoBtn").addEventListener("click", async () => {
+  const ctx = $("#sparkContext").value.trim();
+  if(!ctx){ $("#sparkContext").focus(); return; }
+  const btn = $("#sparkGoBtn");
+  busy(btn, true, "✦ Generate 5 ideas");
+  try{
+    const existing = state.ideas.map(i => i.title).join("; ") || "none";
+    const text = await askClaude(
+      "You are an operator helping a team rapidly ideate. Goal/problem space: \"" + ctx + "\". Existing ideas (do not duplicate): " + existing + ". " +
+      "Generate exactly 5 distinct, concrete, actionable ideas. Mix safe bets and one bold swing. " +
+      "Respond ONLY with a JSON array, no preamble, no markdown fences: [{\"title\": \"short idea name, max 8 words\", \"note\": \"one sentence on how it would work\"}]",
+      1000
+    );
+    const ideas = parseJson(text);
+    ideas.slice(0, 5).forEach(i => state.ideas.push({id: uid(), title: String(i.title), note: String(i.note || ""), by: "Claude ✦", d: null, f: null, v: null}));
+    save(); renderStack(); closeModals();
+    toast(ideas.length + " ideas added to the stack — now score them");
+  }catch(err){
+    if(err.message !== "NO_KEY") toast("Spark failed — check your key and try again");
+  }
+  busy(btn, false, "✦ Generate 5 ideas");
+});
+
+/* pressure-test */
+$("#reviewBtn").addEventListener("click", async () => {
+  const {scoredList} = rankedIdeas();
+  if(scoredList.length === 0){ toast("Score some ideas first"); return; }
+  if(!aiReady()){ openModal("settingsModal"); return; }
+  const btn = $("#reviewBtn");
+  busy(btn, true, "⚖ Pressure-test my scores");
+  try{
+    const payload = scoredList.map(i => ({id: i.id, title: i.title, note: i.note, desirable: i.d, feasible: i.f, viable: i.v}));
+    const text = await askClaude(
+      "You are a sharp strategy operator reviewing a team's idea scores (1-5 scale on desirable, feasible, viable). " +
+      "For each idea, give ONE punchy sentence that pressure-tests the scoring — flag optimism, inconsistency, or a hidden assumption to validate. Be direct, specific, useful. " +
+      "Ideas: " + JSON.stringify(payload) + " " +
+      "Respond ONLY with a JSON array, no preamble, no markdown fences: [{\"id\": \"...\", \"challenge\": \"...\"}]",
+      1600
+    );
+    const reviews = parseJson(text);
+    reviews.forEach(r => { if(r.id && r.challenge) state.reviews[r.id] = String(r.challenge); });
+    save(); renderStack();
+    toast("Pressure-test done — see notes on each card");
+  }catch(err){
+    if(err.message !== "NO_KEY") toast("Review failed — check your key and try again");
+  }
+  busy(btn, false, "⚖ Pressure-test my scores");
+});
+
+/* memo */
+$("#memoBtn").addEventListener("click", async () => {
+  const {scoredList} = rankedIdeas();
+  if(scoredList.length === 0){ toast("Score some ideas first"); return; }
+  if(!aiReady()){ openModal("settingsModal"); return; }
+  const btn = $("#memoBtn");
+  busy(btn, true, "✦ Generate memo");
+  try{
+    const w = state.weights;
+    const payload = scoredList.map((i, idx) => ({rank: idx+1, title: i.title, note: i.note, added_by: i.by || null, desirable: i.d, feasible: i.f, viable: i.v, weighted_score: +i.score.toFixed(2), tier: tierOf(i.score).label}));
+    const text = await askClaude(
+      "Write a crisp one-page decision memo for a leadership team, based on this prioritisation exercise. " +
+      "Scoring: 1-5 on desirable/feasible/viable, weighted D" + w.d + "% F" + w.f + "% V" + w.v + "%. Tiers: Act now (>=4.0), Test it (>=3.0), Park it (<3.0). " +
+      "Data: " + JSON.stringify(payload) + " " +
+      "Structure in markdown with these ### sections: Recommendation (2-3 sentences, lead with the answer), Act now, Test it, Park it, Risks and watch-outs, Next steps (owner-ready actions). " +
+      "Reference ideas by name. Where added_by is present, credit the contributor naturally (e.g. \"Sarah's referral programme\"). Be specific and confident — an operator's memo, not a consultant's hedge. No preamble, no title, start directly with the first section.",
+      2000
+    );
+    state.memo = text.trim();
+    save(); renderMemo();
+    document.querySelector('[data-view="memo"]').click();
+  }catch(err){
+    if(err.message !== "NO_KEY") toast("Memo failed — check your key and try again");
+  }
+  busy(btn, false, "✦ Generate memo");
+});
+$("#memoCopyBtn").addEventListener("click", () => {
+  if(!state.memo){ toast("Generate the memo first"); return; }
+  navigator.clipboard.writeText(state.memo).then(() => toast("Memo copied"));
+});
+
+/* ---------------- exports ---------------- */
+function csvCell(v){
+  v = String(v == null ? "" : v);
+  if(/^[=+\-@\t\r]/.test(v)) v = "'" + v; // stop Sheets/Excel treating text as a formula
+  return '"' + v.replace(/"/g, '""') + '"';
+}
+$("#csvBtn").addEventListener("click", () => {
+  const {scoredList, unscoredList} = rankedIdeas();
+  if(state.ideas.length === 0){ toast("Nothing to export yet"); return; }
+  const rows = [["Rank","Idea","Notes","Added by","Desirable (1-5)","Feasible (1-5)","Viable (1-5)","Weighted score","Tier","Pressure-test note"]];
+  scoredList.forEach((i, idx) => rows.push([idx+1, i.title, i.note, i.by || "", i.d, i.f, i.v, i.score.toFixed(2), tierOf(i.score).label, state.reviews[i.id] || ""]));
+  unscoredList.forEach(i => rows.push(["", i.title, i.note, i.by || "", i.d||"", i.f||"", i.v||"", "", "Unscored", state.reviews[i.id] || ""]));
+  rows.push([]);
+  rows.push(["Weights", "Desirable " + state.weights.d + "%", "Feasible " + state.weights.f + "%", "Viable " + state.weights.v + "%"]);
+  rows.push(["Exported from Ptize · by Yite Labs · D·F·V framework credit IDEO U", new Date().toISOString().slice(0,10)]);
+  const csv = "\uFEFF" + rows.map(r => r.map(csvCell).join(",")).join("\r\n");
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob([csv], {type: "text/csv;charset=utf-8"}));
+  a.download = "ptize-stack-" + new Date().toISOString().slice(0,10) + ".csv";
+  a.click(); URL.revokeObjectURL(a.href);
+  toast("CSV downloaded — File → Import in Google Sheets");
+});
+
+$("#pdfBtn").addEventListener("click", () => {
+  const {scoredList} = rankedIdeas();
+  if(scoredList.length === 0){ toast("Score some ideas first"); return; }
+  const w = state.weights;
+  let html = '<h1>PTIZE<span style="color:#E8501A">!</span> — THE PACK</h1>' +
+    '<div class="pr-stamp">Yite Labs · ' + new Date().toLocaleDateString("en-AU", {day:"numeric", month:"long", year:"numeric"}) +
+    ' · Weights: Desirable ' + w.d + '% / Feasible ' + w.f + '% / Viable ' + w.v + '%</div>';
+  html += '<h2>The ranked stack</h2><table><tr><th>#</th><th>Idea</th><th>D</th><th>F</th><th>V</th><th>Score</th><th>Tier</th></tr>';
+  const tierColor = {act:"#1A7A4A", test:"#C8A830", park:"#8A7260"};
+  scoredList.forEach((i, idx) => {
+    const t = tierOf(i.score);
+    html += '<tr><td>' + (idx+1) + '</td><td><b>' + esc(i.title) + '</b>' +
+      (i.by ? ' <span style="color:#8A7260;font-family:Space Mono,monospace;font-size:9px;letter-spacing:.08em">· ' + esc(i.by).toUpperCase() + '</span>' : '') +
+      (i.note ? '<br><span style="color:#8A7260">' + esc(i.note) + '</span>' : '') +
+      (state.reviews[i.id] ? '<br><span style="color:#2D4FA8">⚖ ' + esc(state.reviews[i.id]) + '</span>' : '') +
+      '</td><td>' + i.d + '</td><td>' + i.f + '</td><td>' + i.v + '</td><td><b>' + i.score.toFixed(1) + '</b></td>' +
+      '<td><span class="pr-tier" style="color:' + tierColor[t.key] + '">' + t.label + '</span></td></tr>';
+  });
+  html += '</table>';
+  if(state.memo){ html += '<h2>The memo</h2><div class="memo-print">' + mdToHtml(state.memo) + '</div>'; }
+  html += '<div class="pr-stamp" style="margin-top:24px">Made with Ptize · by Yite Labs · yitelabs.co · D·F·V framework credit IDEO U</div>';
+  $("#printReport").innerHTML = html;
+  window.print();
+});
+
+/* ---------------- boot ---------------- */
+load();
+keyStatus();
+renderWeights();
+setupWeightBar();
+renderAll();
+})();
+</script>
+</body>
+</html>
