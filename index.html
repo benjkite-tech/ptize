@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Ptize — Ideas in. Decisions out.</title>
-<meta name="description" content="Rapid prioritisation: score ideas on desirability, feasibility and viability, weight what matters, and walk into the room with a rockstar way forward. By Yite Labs.">
+<meta name="description" content="Fast ideas in. Fast decisions out. Generate and score ideas on desirability, feasibility and viability, then walk into the room with a rockstar way forward.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Grotesk:wght@400;500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
@@ -76,6 +76,32 @@ button{font-family:inherit;cursor:pointer}
 .capture input::placeholder{color:var(--ash)}
 #ideaTitle{flex:2 1 280px}
 #ideaNote{flex:3 1 320px}
+/* context box */
+.context-box{margin-top:14px;border:2px solid var(--chalk);background:#fff}
+.context-box summary{
+  cursor:pointer;list-style:none;padding:11px 14px;
+  font-family:var(--mono);font-size:12px;letter-spacing:.04em;color:var(--ink);
+  display:flex;align-items:center;gap:8px;user-select:none;
+}
+.context-box summary::-webkit-details-marker{display:none}
+.context-box summary::before{content:"+";font-weight:700;color:var(--ember);font-size:16px;line-height:1}
+.context-box[open] summary::before{content:"–"}
+.ctx-hint{color:var(--ash)}
+.ctx-dot{width:8px;height:8px;border-radius:50%;background:var(--chalk);flex:0 0 8px}
+.ctx-dot.on{background:var(--moss)}
+.context-inner{padding:4px 14px 14px;display:flex;flex-direction:column;gap:8px}
+.context-inner input[type=url]{
+  font-family:var(--body);font-size:15px;color:var(--ink);
+  background:var(--ground);border:2px solid var(--ink);padding:10px 12px;
+}
+.ctx-file{
+  display:inline-flex;align-items:center;gap:8px;cursor:pointer;
+  border:2px dashed var(--chalk);padding:10px 12px;font-size:14px;color:var(--ash);
+}
+.ctx-file:hover{border-color:var(--ash)}
+.ctx-file input[type=file]{display:none}
+.ctx-file.loaded{border-style:solid;border-color:var(--moss);color:var(--ink)}
+.ctx-note{font-size:12px;color:var(--ash);margin:0}
 .btn{
   border:2px solid var(--ink);background:var(--ink);color:var(--ground);
   font-family:var(--mono);font-size:13px;font-weight:700;letter-spacing:.08em;
@@ -247,10 +273,14 @@ button{font-family:inherit;cursor:pointer}
 .memo-tools{display:flex;gap:8px;margin-top:16px;flex-wrap:wrap}
 
 /* ---------- footer ---------- */
-footer{margin-top:48px;border-top:2px solid var(--ink);padding:20px 0 36px}
+footer{margin-top:48px;border-top:2px solid var(--ink);padding:28px 0 36px}
+.footer-theme{
+  font-family:var(--display);font-size:clamp(22px,3vw,30px);line-height:1.12;
+  letter-spacing:.01em;max-width:780px;margin-bottom:22px;
+}
+.footer-theme{color:var(--ink)}
 .foot-row{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
 .foot-row .label-mono a{color:var(--ash);text-decoration:none;border-bottom:1px solid var(--chalk)}
-#keyStatus.ok{color:var(--moss)}
 
 /* ---------- modal ---------- */
 .modal{
@@ -310,6 +340,10 @@ footer{margin-top:48px;border-top:2px solid var(--ink);padding:20px 0 36px}
   #printReport .memo-print p{margin:8px 0;font-size:13px}
   #printReport .memo-print ul{margin:8px 0 8px 18px;font-size:13px}
   #printReport .memo-print h3{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ember);margin:16px 0 6px}
+  #printReport .pr-pagebreak{break-before:page;page-break-before:always}
+  #printReport table.pr-legend{max-width:560px;margin:0 auto}
+  #printReport table.pr-legend td,#printReport table.pr-legend th{font-size:11px}
+  #printReport .pr-theme{font-family:var(--display);font-size:22px;line-height:1.15;margin:26px 0 6px;max-width:560px}
 }
 </style>
 </head>
@@ -335,10 +369,10 @@ footer{margin-top:48px;border-top:2px solid var(--ink);padding:20px 0 36px}
       </svg>
       <div class="brand-text">
         <h1>PTIZE<span class="bang">!</span></h1>
-        <div class="stamp">PRIORITISATION TOOL · BY YITE LABS</div>
+        <div class="stamp">PRIORITISATION TOOL</div>
       </div>
     </div>
-    <p class="tagline"><strong>Ideas in. Decisions out.</strong> Score everything on what's desirable, feasible and viable — weighted your way — and walk into the room with a rockstar way forward.</p>
+    <p class="tagline"><strong>Fast ideas in. Fast decisions out.</strong> Generate and score ideas, then walk into the room with a rockstar way forward.</p>
   </div>
 </header>
 
@@ -346,8 +380,8 @@ footer{margin-top:48px;border-top:2px solid var(--ink);padding:20px 0 36px}
   <div class="wrap">
     <div class="weights-head">
       <div>
-        <div class="step"><span class="num">01</span> — WEIGHT WHAT MATTERS</div>
-        <div class="step-sub">Three lenses, one call: how much should each count this quarter?</div>
+        <div class="step"><span class="num">STEP 1</span> · WEIGHT WHAT MATTERS</div>
+        <div class="step-sub">Three lenses — what counts most? Set how much each one drives the score.</div>
       </div>
       <div class="weights-readout" id="wReadout"></div>
     </div>
@@ -375,15 +409,15 @@ footer{margin-top:48px;border-top:2px solid var(--ink);padding:20px 0 36px}
       <button class="whandle" id="h1" aria-label="Adjust desirable vs feasible weighting. Arrow keys to change."></button>
       <button class="whandle" id="h2" aria-label="Adjust feasible vs viable weighting. Arrow keys to change."></button>
     </div>
-    <p class="whint">Drag the handles — the stack re-ranks live. Customer-led quarter? Push Desirable. Cash-tight? Push Viable.</p>
+    <p class="whint">Drag the handles — the stack re-ranks live. Customer-led push? Lean Desirable. Cash-tight? Lean Viable.</p>
     <div class="credit">Desirability · Feasibility · Viability framework — credit <a href="https://www.ideou.com" target="_blank" rel="noopener">IDEO U</a></div>
   </div>
 </section>
 
 <section class="capture">
   <div class="wrap">
-    <div class="step"><span class="num">02</span> — CAPTURE</div>
-    <div class="step-sub">Type ideas fast — Enter to add. Or let Claude open the bidding.</div>
+    <div class="step"><span class="num">STEP 2</span> · CAPTURE</div>
+    <div class="step-sub">Type ideas fast — Enter to add. Or use AI to spark ideas.</div>
     <div class="capture-row" style="margin-top:12px">
       <input type="text" id="ideaTitle" placeholder="Type an idea — e.g. 24-hour shipping" aria-label="Idea title">
       <input type="text" id="ideaNote" placeholder="Optional note — problem, context, how it'd work" aria-label="Idea note">
@@ -391,11 +425,22 @@ footer{margin-top:48px;border-top:2px solid var(--ink);padding:20px 0 36px}
       <button class="btn" id="addBtn">Add idea</button>
       <button class="btn ember" id="sparkBtn">✦ Spark ideas</button>
     </div>
+    <details class="context-box" id="contextBox">
+      <summary><span class="ctx-dot" id="ctxDot"></span>Add context for sharper AI <span class="ctx-hint">— a website or a file to tailor every suggestion</span></summary>
+      <div class="context-inner">
+        <input type="url" id="ctxUrl" placeholder="https://yourcompany.com — helps AI tailor to your business" aria-label="Context website URL">
+        <label class="ctx-file" id="ctxFileLabel">
+          <input type="file" id="ctxFile" accept=".txt,.md,.csv,.json,.pdf" aria-label="Upload a context file">
+          <span id="ctxFileText">Attach a file (txt, md, csv, pdf)</span>
+        </label>
+        <p class="ctx-note">Tailors Spark, pressure-tests and the memo. The page is fetched live and read alongside any file text. Stays private until you run an AI action.</p>
+      </div>
+    </details>
   </div>
 </section>
 
 <div class="wrap">
-  <div class="step" style="margin-top:30px"><span class="num">03</span> — BUILD YOUR PRIORITISATION</div>
+  <div class="step" style="margin-top:30px"><span class="num">STEP 3</span> · BUILD YOUR PRIORITISATION</div>
   <div class="step-sub">Score each idea 1–5 on the three lenses. The stack ranks itself — then flip to the Matrix or generate the Memo.</div>
   <nav class="viewbar">
     <div class="tabs" role="tablist">
@@ -404,8 +449,10 @@ footer{margin-top:48px;border-top:2px solid var(--ink);padding:20px 0 36px}
       <button class="tab" data-view="memo" role="tab">The Memo</button>
     </div>
     <div class="exports">
+      <button class="btn ghost small" id="shareBtn">⤴ Share link</button>
       <button class="btn ghost small" id="csvBtn">↓ CSV for Sheets</button>
       <button class="btn ghost small" id="pdfBtn">↓ PDF pack</button>
+      <button class="btn ghost small" id="resetBtn">⟲ New session</button>
     </div>
   </nav>
 
@@ -435,30 +482,22 @@ footer{margin-top:48px;border-top:2px solid var(--ink);padding:20px 0 36px}
 </div>
 
 <footer>
-  <div class="wrap foot-row">
-    <div class="label-mono">Ptize · by <a href="https://yitelabs.co" target="_blank" rel="noopener">Yite Labs</a> · D·F·V framework credit <a href="https://www.ideou.com" target="_blank" rel="noopener">IDEO U</a></div>
-    <div class="label-mono"><button class="btn ghost small" id="settingsBtn">AI settings</button> <span id="keyStatus"></span></div>
+  <div class="wrap">
+    <p class="footer-theme">Ideas are cheap. Picking the right ones — and executing — is everything. Ptize just gets you to the decision, and the experiment, sooner.</p>
+    <div class="foot-row">
+      <div class="label-mono">Ptize · prioritisation tool</div>
+      <div class="label-mono">D·F·V framework credit <a href="https://www.ideou.com" target="_blank" rel="noopener">IDEO U</a></div>
+    </div>
   </div>
 </footer>
 </div>
 
 <!-- modals -->
-<div class="modal" id="settingsModal" role="dialog" aria-modal="true" aria-labelledby="settingsH">
-  <div class="modal-box">
-    <h2 id="settingsH">AI SETTINGS</h2>
-    <p>When Ptize is deployed, AI runs on the built-in connection — nothing to set up. This optional key is a personal fallback (e.g. if you open the raw file locally). It's stored only on this device and sent only to api.anthropic.com.</p>
-    <input type="password" id="keyInput" placeholder="sk-ant-..." aria-label="Anthropic API key">
-    <div class="modal-actions">
-      <button class="btn ghost small" id="keyClearBtn">Clear key</button>
-      <button class="btn small" id="keySaveBtn">Save</button>
-    </div>
-  </div>
-</div>
 
 <div class="modal" id="sparkModal" role="dialog" aria-modal="true" aria-labelledby="sparkH">
   <div class="modal-box">
     <h2 id="sparkH">SPARK IDEAS</h2>
-    <p>Describe the goal or problem space. Claude drafts five ideas straight into your stack — unscored, ready for the team to rate.</p>
+    <p>Describe the goal or problem space. AI drafts five ideas straight into your stack — unscored, ready for the team to rate. Add a website or file under "Add context" first for sharper, tailored suggestions.</p>
     <textarea id="sparkContext" placeholder="e.g. Reduce churn for our SMB customers in the first 90 days"></textarea>
     <div class="modal-actions">
       <button class="btn ghost small" data-close>Cancel</button>
@@ -503,7 +542,8 @@ function uid(){ return Math.random().toString(36).slice(2,9); }
 function scored(i){ return i.d && i.f && i.v; }
 function weightedScore(i){
   const w = state.weights;
-  return (i.d*w.d + i.f*w.f + i.v*w.v) / (w.d + w.f + w.v);
+  const raw = (i.d*w.d + i.f*w.f + i.v*w.v) / (w.d + w.f + w.v);
+  return Math.round(raw * 10) / 10; // 1dp everywhere, so displayed score and tier always agree
 }
 function tierOf(s){
   if(s >= 4.0) return {key:"act", label:"Act now"};
@@ -676,30 +716,27 @@ function loadSample(){
 }
 
 /* ---------------- render: matrix ---------------- */
-function renderMatrix(){
-  const svg = $("#matrixSvg");
+function buildMatrixInner(forPrint){
   const W = 720, H = 520, P = {l: 64, r: 24, t: 30, b: 56};
   const iw = W - P.l - P.r, ih = H - P.t - P.b;
   const w = state.weights;
   const {scoredList} = rankedIdeas();
   const X = f => P.l + (f - 1) / 4 * iw;
   const Y = a => P.t + ih - (a - 1) / 4 * ih;
+  // print can't rely on CSS classes, so inline the label styles when needed
+  const ql = forPrint ? 'font-family="Space Mono,monospace" font-size="10" fill="#8A7260" letter-spacing="1"' : 'class="qlabel"';
+  const ax = forPrint ? 'font-family="Space Mono,monospace" font-size="10" fill="#8A7260" letter-spacing="1"' : 'class="axis"';
   let s = "";
-  // quadrant tint
   s += '<rect x="' + X(3) + '" y="' + P.t + '" width="' + (X(5)-X(3)) + '" height="' + (Y(3)-P.t) + '" fill="#E8501A" opacity="0.06"/>';
-  // frame + midlines
   s += '<rect x="' + P.l + '" y="' + P.t + '" width="' + iw + '" height="' + ih + '" fill="none" stroke="#1C0F08" stroke-width="2"/>';
   s += '<line x1="' + X(3) + '" y1="' + P.t + '" x2="' + X(3) + '" y2="' + (P.t+ih) + '" stroke="#E4DDD0" stroke-width="2"/>';
   s += '<line x1="' + P.l + '" y1="' + Y(3) + '" x2="' + (P.l+iw) + '" y2="' + Y(3) + '" stroke="#E4DDD0" stroke-width="2"/>';
-  // quadrant labels
-  s += '<text class="qlabel" x="' + (X(5)-10) + '" y="' + (P.t+18) + '" text-anchor="end">Do now</text>';
-  s += '<text class="qlabel" x="' + (P.l+10) + '" y="' + (P.t+18) + '">Big bets</text>';
-  s += '<text class="qlabel" x="' + (X(5)-10) + '" y="' + (P.t+ih-10) + '" text-anchor="end">Quick fills</text>';
-  s += '<text class="qlabel" x="' + (P.l+10) + '" y="' + (P.t+ih-10) + '">Park</text>';
-  // axes
-  s += '<text class="axis" x="' + (P.l + iw/2) + '" y="' + (H-16) + '" text-anchor="middle">Feasibility →</text>';
-  s += '<text class="axis" transform="rotate(-90 20 ' + (P.t + ih/2) + ')" x="20" y="' + (P.t + ih/2) + '" text-anchor="middle">Attractiveness (D+V weighted) →</text>';
-  // dots — fan out any that share coordinates so none hide behind another
+  s += '<text ' + ql + ' x="' + (X(5)-10) + '" y="' + (P.t+18) + '" text-anchor="end">Do now</text>';
+  s += '<text ' + ql + ' x="' + (P.l+10) + '" y="' + (P.t+18) + '">Big bets</text>';
+  s += '<text ' + ql + ' x="' + (X(5)-10) + '" y="' + (P.t+ih-10) + '" text-anchor="end">Quick fills</text>';
+  s += '<text ' + ql + ' x="' + (P.l+10) + '" y="' + (P.t+ih-10) + '">Park</text>';
+  s += '<text ' + ax + ' x="' + (P.l + iw/2) + '" y="' + (H-16) + '" text-anchor="middle">Feasibility →</text>';
+  s += '<text ' + ax + ' transform="rotate(-90 20 ' + (P.t + ih/2) + ')" x="20" y="' + (P.t + ih/2) + '" text-anchor="middle">Attractiveness (D+V weighted) →</text>';
   const tierFill = {act:"#1A7A4A", test:"#C8A830", park:"#8A7260"};
   const seen = {};
   scoredList.forEach((i, idx) => {
@@ -707,19 +744,21 @@ function renderMatrix(){
     let cx = X(i.f), cy = Y(attract);
     const key = Math.round(cx) + "," + Math.round(cy);
     const n = seen[key] = (seen[key] || 0) + 1;
-    if(n > 1){
-      const ang = (n - 2) * (Math.PI / 3);
-      cx += Math.cos(ang) * 30; cy += Math.sin(ang) * 30;
-    }
+    if(n > 1){ const ang = (n - 2) * (Math.PI / 3); cx += Math.cos(ang) * 30; cy += Math.sin(ang) * 30; }
     const tier = tierOf(i.score).key;
+    const dotText = forPrint ? 'font-family="Space Mono,monospace" font-size="10" font-weight="700" fill="#fff"' : '';
     s += '<g class="dot"><title>' + esc(i.title) + ' — ' + i.score.toFixed(1) + '</title>' +
       '<circle cx="' + cx + '" cy="' + cy + '" r="14" fill="' + tierFill[tier] + '" stroke="#1C0F08" stroke-width="2"/>' +
-      '<text x="' + cx + '" y="' + (cy+3.5) + '" text-anchor="middle">' + (idx+1) + '</text></g>';
+      '<text ' + dotText + ' x="' + cx + '" y="' + (cy+3.5) + '" text-anchor="middle">' + (idx+1) + '</text></g>';
   });
   if(scoredList.length === 0){
     s += '<text x="' + (P.l + iw/2) + '" y="' + (P.t + ih/2) + '" text-anchor="middle" fill="#8A7260" font-family="Space Grotesk" font-size="15">Score at least one idea on all three dimensions to plot it.</text>';
   }
-  svg.innerHTML = s;
+  return s;
+}
+function renderMatrix(){
+  $("#matrixSvg").innerHTML = buildMatrixInner(false);
+  const {scoredList} = rankedIdeas();
   $("#matrixLegend").innerHTML = scoredList.map((i, idx) =>
     '<li><span class="ml-num">' + (idx+1) + '</span><span class="ml-dot ' + tierOf(i.score).key + '"></span><span class="ml-title">' + esc(i.title) + '</span></li>'
   ).join("");
@@ -747,8 +786,9 @@ function mdToHtml(md){
 function renderMemo(){
   const has = !!state.memo;
   $("#memoEmpty").style.display = has ? "none" : "block";
+  const meta = state.memoMeta || {d: state.weights.d, f: state.weights.f, v: state.weights.v, date: new Date().toISOString()};
   $("#memoBody").innerHTML = has
-    ? '<h2>THE MEMO</h2><div class="memo-meta">Ptize · ' + new Date().toLocaleDateString("en-AU", {day:"numeric", month:"short", year:"numeric"}) + ' · weights D' + state.weights.d + '/F' + state.weights.f + '/V' + state.weights.v + '</div>' + mdToHtml(state.memo)
+    ? '<h2>THE MEMO</h2><div class="memo-meta">Ptize · ' + new Date(meta.date).toLocaleDateString("en-AU", {day:"numeric", month:"short", year:"numeric"}) + ' · weights D' + meta.d + '/F' + meta.f + '/V' + meta.v + '</div>' + mdToHtml(state.memo)
     : "";
 }
 
@@ -853,28 +893,47 @@ document.addEventListener("keydown", e => { if(e.key === "Escape") closeModals()
 /* ---------------- AI ---------------- */
 function getKey(){ return localStorage.getItem(LS_KEY) || ""; }
 function aiReady(){ return PROXY_ENABLED || !!getKey(); }
-function keyStatus(){
-  const el = $("#keyStatus");
-  if(PROXY_ENABLED){ el.textContent = "● AI ready"; el.className = "ok"; return; }
-  if(getKey()){ el.textContent = "● AI on"; el.className = "ok"; }
-  else { el.textContent = "○ AI off — add a key"; el.className = ""; }
+
+/* ---------------- context (website + file) ---------------- */
+let contextFile = null;   // {name, text}
+function ctxUrl(){ return ($("#ctxUrl").value || "").trim(); }
+function hasContext(){ return !!ctxUrl() || !!contextFile; }
+function updateCtxDot(){ $("#ctxDot").classList.toggle("on", hasContext()); }
+function contextBlock(){
+  let parts = [];
+  // The website URL travels separately as context_url — the proxy fetches the page
+  // server-side and injects its text. The file is read here in the browser.
+  if(contextFile) parts.push("Attached context file \"" + contextFile.name + "\":\n" + contextFile.text.slice(0, 6000));
+  if(!parts.length) return "";
+  return "\n\nCONTEXT TO TAILOR YOUR RESPONSE:\n" + parts.join("\n\n") + "\n";
 }
-$("#settingsBtn").addEventListener("click", () => { $("#keyInput").value = getKey(); openModal("settingsModal"); });
-$("#keySaveBtn").addEventListener("click", () => {
-  const k = $("#keyInput").value.trim();
-  if(k) localStorage.setItem(LS_KEY, k);
-  keyStatus(); closeModals(); toast(k ? "Key saved on this device" : "No key entered");
-});
-$("#keyClearBtn").addEventListener("click", () => {
-  localStorage.removeItem(LS_KEY); $("#keyInput").value = "";
-  keyStatus(); toast("Key cleared");
+$("#ctxUrl").addEventListener("input", updateCtxDot);
+$("#ctxFile").addEventListener("change", async e => {
+  const f = e.target.files[0];
+  if(!f) return;
+  const label = $("#ctxFileLabel"), txt = $("#ctxFileText");
+  if(f.size > 2_000_000){ toast("File too large — keep it under 2MB"); e.target.value = ""; return; }
+  try{
+    let text = "";
+    if(f.type === "application/pdf" || f.name.endsWith(".pdf")){
+      text = "[PDF attached: " + f.name + ". Text not extracted client-side — describe its likely relevance from the filename and the user's ideas.]";
+    }else{
+      text = await f.text();
+    }
+    contextFile = {name: f.name, text};
+    txt.textContent = f.name + " ✓";
+    label.classList.add("loaded");
+    updateCtxDot();
+    toast("Context file attached");
+  }catch(err){ toast("Couldn't read that file"); }
 });
 
 async function askClaude(prompt, maxTokens, model){
   const payload = {
     model: model || MODEL,
     max_tokens: maxTokens || 1200,
-    messages: [{role: "user", content: prompt}]
+    messages: [{role: "user", content: prompt}],
+    context_url: ctxUrl() || undefined
   };
 
   // 1) Try the serverless proxy (key lives server-side, zero setup for visitors).
@@ -900,7 +959,7 @@ async function askClaude(prompt, maxTokens, model){
 
   // 2) Fallback: user's own key, called directly from the browser.
   const key = getKey();
-  if(!key){ openModal("settingsModal"); throw new Error("NO_KEY"); }
+  if(!key){ throw new Error("NO_KEY: AI is not configured."); }
   const res = await fetch("https://api.anthropic.com/v1/messages", {
     method: "POST",
     headers: {
@@ -930,7 +989,7 @@ function busy(btn, on, idleHtml){
 
 /* spark */
 $("#sparkBtn").addEventListener("click", () => {
-  if(!aiReady()){ openModal("settingsModal"); return; }
+  if(!aiReady()){ toast("AI is not configured on this deployment"); return; }
   openModal("sparkModal"); $("#sparkContext").focus();
 });
 $("#sparkGoBtn").addEventListener("click", async () => {
@@ -943,6 +1002,7 @@ $("#sparkGoBtn").addEventListener("click", async () => {
     const text = await askClaude(
       "You are an operator helping a team rapidly ideate. Goal/problem space: \"" + ctx + "\". Existing ideas (do not duplicate): " + existing + ". " +
       "Generate exactly 5 distinct, concrete, actionable ideas. Mix safe bets and one bold swing. " +
+      contextBlock() +
       "Respond ONLY with a JSON array, no preamble, no markdown fences: [{\"title\": \"short idea name, max 8 words\", \"note\": \"one sentence on how it would work\"}]",
       1000
     );
@@ -951,7 +1011,7 @@ $("#sparkGoBtn").addEventListener("click", async () => {
     save(); renderStack(); closeModals();
     toast(ideas.length + " ideas added to the stack — now score them");
   }catch(err){
-    if(err.message !== "NO_KEY") toast("Spark failed — check your key and try again");
+    toast(String(err.message).startsWith("RATE") ? String(err.message).slice(6) : "Spark couldn't reach the AI — give it a moment and try again");
   }
   busy(btn, false, "✦ Generate 5 ideas");
 });
@@ -960,7 +1020,7 @@ $("#sparkGoBtn").addEventListener("click", async () => {
 $("#reviewBtn").addEventListener("click", async () => {
   const {scoredList} = rankedIdeas();
   if(scoredList.length === 0){ toast("Score some ideas first"); return; }
-  if(!aiReady()){ openModal("settingsModal"); return; }
+  if(!aiReady()){ toast("AI is not configured on this deployment"); return; }
   const btn = $("#reviewBtn");
   busy(btn, true, "⚖ Pressure-test my scores");
   try{
@@ -969,6 +1029,7 @@ $("#reviewBtn").addEventListener("click", async () => {
       "You are a sharp strategy operator reviewing a team's idea scores (1-5 scale on desirable, feasible, viable). " +
       "For each idea, give ONE punchy sentence that pressure-tests the scoring — flag optimism, inconsistency, or a hidden assumption to validate. Be direct, specific, useful. " +
       "Ideas: " + JSON.stringify(payload) + " " +
+      contextBlock() +
       "Respond ONLY with a JSON array, no preamble, no markdown fences: [{\"id\": \"...\", \"challenge\": \"...\"}]",
       1600
     );
@@ -977,7 +1038,7 @@ $("#reviewBtn").addEventListener("click", async () => {
     save(); renderStack();
     toast("Pressure-test done — see notes on each card");
   }catch(err){
-    if(err.message !== "NO_KEY") toast("Review failed — check your key and try again");
+    toast(String(err.message).startsWith("RATE") ? String(err.message).slice(6) : "Pressure-test couldn't reach the AI — try again in a moment");
   }
   busy(btn, false, "⚖ Pressure-test my scores");
 });
@@ -986,25 +1047,34 @@ $("#reviewBtn").addEventListener("click", async () => {
 $("#memoBtn").addEventListener("click", async () => {
   const {scoredList} = rankedIdeas();
   if(scoredList.length === 0){ toast("Score some ideas first"); return; }
-  if(!aiReady()){ openModal("settingsModal"); return; }
+  if(!aiReady()){ toast("AI is not configured on this deployment"); return; }
   const btn = $("#memoBtn");
   busy(btn, true, "✦ Generate memo");
   try{
     const w = state.weights;
-    const payload = scoredList.map((i, idx) => ({rank: idx+1, title: i.title, note: i.note, added_by: i.by || null, desirable: i.d, feasible: i.f, viable: i.v, weighted_score: +i.score.toFixed(2), tier: tierOf(i.score).label}));
+    const payload = scoredList.map((i, idx) => ({rank: idx+1, title: i.title, note: i.note, added_by: i.by || null, desirable: i.d, feasible: i.f, viable: i.v, weighted_score: +i.score.toFixed(1), tier: tierOf(i.score).label}));
     const text = await askClaude(
       "Write a crisp one-page decision memo for a leadership team, based on this prioritisation exercise. " +
       "Scoring: 1-5 on desirable/feasible/viable, weighted D" + w.d + "% F" + w.f + "% V" + w.v + "%. Tiers: Act now (>=4.0), Test it (>=3.0), Park it (<3.0). " +
       "Data: " + JSON.stringify(payload) + " " +
-      "Structure in markdown with these ### sections: Recommendation (2-3 sentences, lead with the answer), Act now, Test it, Park it, Risks and watch-outs, Next steps (owner-ready actions). " +
-      "Reference ideas by name. Where added_by is present, credit the contributor naturally (e.g. \"Sarah's referral programme\"). Be specific and confident — an operator's memo, not a consultant's hedge. No preamble, no title, start directly with the first section.",
+      contextBlock() +
+      "Structure in markdown with these ### sections: " +
+      "Recommendation (2-3 sentences, lead with the answer — what should we do first and why). " +
+      "Act now (the top ideas to commit to). " +
+      "Test it (ideas worth a cheap experiment before committing — say what the experiment is). " +
+      "Park it (what to drop, one line each on why). " +
+      "Risks and watch-outs. " +
+      "Next steps (3-5 concrete actions, each as: action — suggested owner role — rough timeframe. Make them specific enough to act on Monday). " +
+      "Reference ideas by name. Where added_by is present, credit the contributor naturally (e.g. \"Sarah's referral programme\"). " +
+      "Be specific and confident — an operator's memo, not a consultant's hedge. No preamble, no title, start directly with the first section.",
       2000
     );
     state.memo = text.trim();
+    state.memoMeta = {d: w.d, f: w.f, v: w.v, date: new Date().toISOString()};
     save(); renderMemo();
     document.querySelector('[data-view="memo"]').click();
   }catch(err){
-    if(err.message !== "NO_KEY") toast("Memo failed — check your key and try again");
+    toast(String(err.message).startsWith("RATE") ? String(err.message).slice(6) : "Memo couldn't reach the AI — try again in a moment");
   }
   busy(btn, false, "✦ Generate memo");
 });
@@ -1012,6 +1082,51 @@ $("#memoCopyBtn").addEventListener("click", () => {
   if(!state.memo){ toast("Generate the memo first"); return; }
   navigator.clipboard.writeText(state.memo).then(() => toast("Memo copied"));
 });
+
+/* ---------------- share + reset ---------------- */
+function encodeSession(){
+  const payload = {ideas: state.ideas, weights: state.weights, reviews: state.reviews, memo: state.memo, memoMeta: state.memoMeta || null};
+  return btoa(unescape(encodeURIComponent(JSON.stringify(payload))));
+}
+function decodeSession(s){
+  return JSON.parse(decodeURIComponent(escape(atob(s))));
+}
+$("#shareBtn").addEventListener("click", () => {
+  if(state.ideas.length === 0){ toast("Nothing to share yet — add some ideas first"); return; }
+  let enc = encodeSession();
+  if(enc.length > 50000){
+    // huge memo can blow past safe URL lengths — share without it
+    const slim = {ideas: state.ideas, weights: state.weights, reviews: state.reviews, memo: null, memoMeta: null};
+    enc = btoa(unescape(encodeURIComponent(JSON.stringify(slim))));
+  }
+  const url = location.origin + location.pathname + "#s=" + enc;
+  navigator.clipboard.writeText(url)
+    .then(() => toast("Share link copied — anyone who opens it sees this session"))
+    .catch(() => toast("Couldn't copy — your browser blocked clipboard access"));
+});
+$("#resetBtn").addEventListener("click", () => {
+  if(state.ideas.length === 0 && !state.memo){ toast("Already a fresh session"); return; }
+  const snapshot = JSON.stringify(state);
+  state = {ideas: [], weights: {d: 34, f: 33, v: 33}, reviews: {}, memo: null, memoMeta: null};
+  editingId = null;
+  save(); renderWeights(); renderAll();
+  toast("Session cleared", "Undo", () => {
+    state = JSON.parse(snapshot);
+    save(); renderWeights(); renderAll();
+  });
+});
+function loadSharedSession(){
+  if(!location.hash.startsWith("#s=")) return;
+  try{
+    const dec = decodeSession(location.hash.slice(3));
+    if(dec && Array.isArray(dec.ideas)){
+      state = Object.assign(state, dec);
+      save();
+      history.replaceState(null, "", location.pathname + location.search);
+      setTimeout(() => toast("Shared session loaded"), 400);
+    }
+  }catch(e){ /* malformed hash — ignore */ }
+}
 
 /* ---------------- exports ---------------- */
 function csvCell(v){
@@ -1023,7 +1138,7 @@ $("#csvBtn").addEventListener("click", () => {
   const {scoredList, unscoredList} = rankedIdeas();
   if(state.ideas.length === 0){ toast("Nothing to export yet"); return; }
   const rows = [["Rank","Idea","Notes","Added by","Desirable (1-5)","Feasible (1-5)","Viable (1-5)","Weighted score","Tier","Pressure-test note"]];
-  scoredList.forEach((i, idx) => rows.push([idx+1, i.title, i.note, i.by || "", i.d, i.f, i.v, i.score.toFixed(2), tierOf(i.score).label, state.reviews[i.id] || ""]));
+  scoredList.forEach((i, idx) => rows.push([idx+1, i.title, i.note, i.by || "", i.d, i.f, i.v, i.score.toFixed(1), tierOf(i.score).label, state.reviews[i.id] || ""]));
   unscoredList.forEach(i => rows.push(["", i.title, i.note, i.by || "", i.d||"", i.f||"", i.v||"", "", "Unscored", state.reviews[i.id] || ""]));
   rows.push([]);
   rows.push(["Weights", "Desirable " + state.weights.d + "%", "Feasible " + state.weights.f + "%", "Viable " + state.weights.v + "%"]);
@@ -1040,30 +1155,53 @@ $("#pdfBtn").addEventListener("click", () => {
   const {scoredList} = rankedIdeas();
   if(scoredList.length === 0){ toast("Score some ideas first"); return; }
   const w = state.weights;
-  let html = '<h1>PTIZE<span style="color:#E8501A">!</span> — THE PACK</h1>' +
-    '<div class="pr-stamp">Yite Labs · ' + new Date().toLocaleDateString("en-AU", {day:"numeric", month:"long", year:"numeric"}) +
-    ' · Weights: Desirable ' + w.d + '% / Feasible ' + w.f + '% / Viable ' + w.v + '%</div>';
-  html += '<h2>The ranked stack</h2><table><tr><th>#</th><th>Idea</th><th>D</th><th>F</th><th>V</th><th>Score</th><th>Tier</th></tr>';
+  const dateStr = new Date().toLocaleDateString("en-AU", {day:"numeric", month:"long", year:"numeric"});
   const tierColor = {act:"#1A7A4A", test:"#C8A830", park:"#8A7260"};
+
+  let html = '<h1>PTIZE<span style="color:#E8501A">!</span> — DECISION PACK</h1>' +
+    '<div class="pr-stamp">' + dateStr + ' · Weights: Desirable ' + w.d + '% / Feasible ' + w.f + '% / Viable ' + w.v + '%</div>';
+
+  // 1) The memo (the decision) leads the pack
+  if(state.memo){
+    html += '<h2>The recommendation</h2><div class="memo-print">' + mdToHtml(state.memo) + '</div>';
+  }else{
+    html += '<h2>The recommendation</h2><p style="color:#8A7260;font-size:13px">Generate the Memo in Ptize to include the written recommendation here.</p>';
+  }
+
+  // 2) The matrix
+  html += '<h2' + (state.memo ? ' class="pr-pagebreak"' : '') + '>The priority matrix</h2>' +
+    '<svg viewBox="0 0 720 520" width="100%" style="max-width:560px;display:block;margin:6px auto 4px">' + buildMatrixInner(true) + '</svg>';
+  html += '<table class="pr-legend"><tr><th>#</th><th>Idea</th><th>Tier</th></tr>';
   scoredList.forEach((i, idx) => {
     const t = tierOf(i.score);
-    html += '<tr><td>' + (idx+1) + '</td><td><b>' + esc(i.title) + '</b>' +
-      (i.by ? ' <span style="color:#8A7260;font-family:Space Mono,monospace;font-size:9px;letter-spacing:.08em">· ' + esc(i.by).toUpperCase() + '</span>' : '') +
-      (i.note ? '<br><span style="color:#8A7260">' + esc(i.note) + '</span>' : '') +
-      (state.reviews[i.id] ? '<br><span style="color:#2D4FA8">⚖ ' + esc(state.reviews[i.id]) + '</span>' : '') +
-      '</td><td>' + i.d + '</td><td>' + i.f + '</td><td>' + i.v + '</td><td><b>' + i.score.toFixed(1) + '</b></td>' +
+    html += '<tr><td>' + (idx+1) + '</td><td>' + esc(i.title) + '</td>' +
       '<td><span class="pr-tier" style="color:' + tierColor[t.key] + '">' + t.label + '</span></td></tr>';
   });
   html += '</table>';
-  if(state.memo){ html += '<h2>The memo</h2><div class="memo-print">' + mdToHtml(state.memo) + '</div>'; }
-  html += '<div class="pr-stamp" style="margin-top:24px">Made with Ptize · by Yite Labs · yitelabs.co · D·F·V framework credit IDEO U</div>';
+
+  // 3) Appendix — the full ranked stack (scores only, NO pressure-test notes)
+  html += '<h2 class="pr-pagebreak">Appendix — the ranked stack</h2>' +
+    '<table><tr><th>#</th><th>Idea</th><th>Added by</th><th>D</th><th>F</th><th>V</th><th>Score</th><th>Tier</th></tr>';
+  scoredList.forEach((i, idx) => {
+    const t = tierOf(i.score);
+    html += '<tr><td>' + (idx+1) + '</td>' +
+      '<td><b>' + esc(i.title) + '</b>' + (i.note ? '<br><span style="color:#8A7260">' + esc(i.note) + '</span>' : '') + '</td>' +
+      '<td style="color:#8A7260">' + esc(i.by || '—') + '</td>' +
+      '<td>' + i.d + '</td><td>' + i.f + '</td><td>' + i.v + '</td>' +
+      '<td><b>' + i.score.toFixed(1) + '</b></td>' +
+      '<td><span class="pr-tier" style="color:' + tierColor[t.key] + '">' + t.label + '</span></td></tr>';
+  });
+  html += '</table>';
+
+  html += '<p class="pr-theme">Ideas are cheap. Picking the right ones — and executing — is everything.</p>';
+  html += '<div class="pr-stamp" style="margin-top:14px">Made with Ptize · D·F·V framework credit IDEO U</div>';
   $("#printReport").innerHTML = html;
   window.print();
 });
 
 /* ---------------- boot ---------------- */
 load();
-keyStatus();
+loadSharedSession();
 renderWeights();
 setupWeightBar();
 renderAll();
